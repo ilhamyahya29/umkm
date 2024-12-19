@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maps - Rumah Makan Setia</title>
+    <link rel="stylesheet" href="mapss.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+
+<body>
+     <header class="header">
+    <div class="header-content">
+        <h1>RUMAH MAKAN SETIA</h1>
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="maps.html">Maps</a>
+            <a href="pemesanan.html">Pemesanan</a>
+            <a href="about.html">tentang kami</a>
+        </nav>
+    </div>
+</header>
+    <main class="content">
+        <section class="section">
+            <h2>Lokasi</h2>
+            <div id="map" class="map"></div>
+                    <section class="section">
+            <div class="contact-info">
+                <p>📞 Telepon: 0857-5738-3851</p>
+                <p>🏢 Alamat: Jl. Bina Karya No.35</p>
+            </div>
+        </section>
+        </section>
+    </main>
+    <script>
+        const map = L.map("map").setView([-6.1214112, 120.4607031], 18);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        // Marker utama untuk lokasi restoran
+            const marker = L.marker([-6.1214112, 120.4607031]).addTo(map);
+            marker.bindTooltip("Rumah Makan Setia", {
+                permanent: true,
+                direction: "top"
+            });
+            // Menambahkan GeoJSON Masjid (MultiLineString)
+                fetch("Masjid2.geojson")
+                    .then(response => response.json())
+                    .then(geojsonData => {
+                        L.geoJSON(geojsonData, {
+                            onEachFeature: function (feature, layer) {
+                                if (feature.properties && feature.properties["NAMA MASJID"]) {
+                                    layer.bindPopup("<strong>NAMA MASJID:</strong> " + feature.properties["NAMA MASJID"]);
+                                }
+                            },
+                            style: function (feature) {
+                                return {
+                                    color: "green",
+                                    weight: 3,
+                                    opacity: 0.7
+                                };
+                            }
+                        }).addTo(map);
+                    });
+
+            // Menambahkan GeoJSON Sekolah (MultiLineString)
+                fetch("sekolah2.geojson")
+                    .then(response => response.json())
+                    .then(geojsonData => {
+                        L.geoJSON(geojsonData, {
+                            onEachFeature: function (feature, layer) {
+                                if (feature.properties && feature.properties["Nama Sekolah Kep.Selayar"]) {
+                                    layer.bindPopup("<strong>Nama Sekolah Kep.Selayar:</strong> " + feature.properties["Nama Sekolah Kep.Selayar"]);
+                                }
+                            },
+                            style: function (feature) {
+                                return {
+                                    color: "green",
+                                    weight: 3,
+                                    opacity: 0.7
+                                };
+                            }
+                        }).addTo(map);
+                    });
+                // Menambahkan GeoJSON jalan (MultiLineString)
+                fetch("jalan.geojson")
+                    .then(response => response.json())
+                    .then(geojsonData => {
+                        L.geoJSON(geojsonData, {
+                            onEachFeature: function (feature, layer) {
+                                if (feature.properties && feature.properties["Nama_Jalan"]) {
+                                    layer.bindPopup("<strong>Nama_Jalan:</strong> " + feature.properties["Nama_Jalan"]);
+                                }
+                            },
+                            style: function (feature) {
+                                return {
+                                    color: "green",
+                                    weight: 3,
+                                    opacity: 0.7
+                                };
+                            }
+                        }).addTo(map);
+                    });
+
+                // Menambahkan GeoJSON benteng (Polygon)
+                fetch("benteng.geojson")
+                    .then(response => response.json())
+                    .then(geojsonData => {
+                        L.geoJSON(geojsonData, {
+                            onEachFeature: function (feature, layer) {
+                                if (feature.properties && feature.properties["NAMOBJ"]) {
+                                    layer.bindPopup("<strong>NAMOBJ:</strong> " + feature.properties["NAMOBJ"]);
+                                }
+                            },
+                            style: function (feature) {
+                                return {
+                                    color: "blue",
+                                    weight: 2,
+                                    fillColor: "cyan",
+                                    fillOpacity: 0.5
+
+
+                                
+                                };
+                            }
+                        }).addTo(map);
+                    });
+    </script>
+</body>
+
+</html>
